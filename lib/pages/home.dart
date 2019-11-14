@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -8,26 +6,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  void getHelloWorld() async {
 
-    // make the request
-    Response responseT = await get('https://thoominspotify.com/api/helloworld');
-    Map dataT = jsonDecode(responseT.body);
-
-    // get properties from data
-    String message = dataT['message'];
-    print(message);
-
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getHelloWorld();
-  }
+  int currentTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+
+      backgroundColor: Colors.green,
+    );
   }
 }

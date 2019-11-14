@@ -49,7 +49,6 @@ class Login extends StatelessWidget {
                       labelText: 'Enter Party Code'
                   ),
                 ),
-
               ],
             ),
           ),
