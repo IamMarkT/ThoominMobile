@@ -10,6 +10,7 @@ class _HomeState extends State<Home> {
   int selectedPage = 0;
   final pageOptions = [
     Search(),
+    //currentlyplaying()
     SafeArea(child: Text('We THOOMIN!', style: TextStyle(fontSize: 36),)),
     SafeArea(child: Text('Landscape', style: TextStyle(fontSize: 36),)),
   ];
