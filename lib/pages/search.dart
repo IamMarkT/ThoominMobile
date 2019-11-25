@@ -19,9 +19,6 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     super.initState();
-    // getSearchResult(query);
-    //print(searchOutput.tracks.items[2].id);
-    //await input.getSearchResults();
   }
 
   @override
@@ -49,8 +46,6 @@ class _SearchState extends State<Search> {
 class SongSearch extends SearchDelegate<Tracks>{
   final recentSearch = [];
   int offset = 0;
-
-
 
   // DONE; WORKING CLEAR BUTTON
   @override
@@ -138,8 +133,6 @@ class SongSearch extends SearchDelegate<Tracks>{
     }
   }
 
-  //Text(searchOutput.tracks.items[5].name),
-
   @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
@@ -157,13 +150,9 @@ class SongSearch extends SearchDelegate<Tracks>{
       itemCount: suggestionList.length,
     );
   }
-
 }
 
 Future<void> getSearchResults(String query, int offset, String token) async {
- // currentToken.accessToken = await currentToken.getAccessToken();
-  // String token = currentToken.accessToken;
-  print(currentToken.accessToken);
 
   try {
     // make the request
@@ -174,16 +163,12 @@ Future<void> getSearchResults(String query, int offset, String token) async {
     ); // enter access token after "Bearer"
 
     var resultMap = jsonDecode(response.body);
-    print(resultMap);
+    print(resultMap); //
     searchOutput = SearchResult.fromJson(resultMap);
 
-    print(searchOutput.tracks.items[19].name);
+    print(searchOutput.tracks.items[19].name); //
   }catch (e){
     print('caught error: $e');
   }
-
-  // get properties from data
-  // String message = resultMap.toString();
-  //  print(message);
 
 } // end of getSearchResults
