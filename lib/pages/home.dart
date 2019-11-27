@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:thoomin/services/SearchResult.dart';
-import 'dart:convert';
-import 'package:thoomin/services/access_token.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:thoomin/services/AccessToken.dart';
+import 'song.dart';
 
 SearchResult searchOutput = SearchResult();
 AccessToken currentToken = AccessToken();
@@ -138,7 +139,13 @@ class SongSearch extends SearchDelegate<Tracks>{
                       ),
                       trailing: IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  SongPage(searchOutput.tracks.items[index])
+                              ),
+                          );},
                       ),
                     ),
                   );
@@ -180,25 +187,29 @@ class SongSearch extends SearchDelegate<Tracks>{
       itemCount: suggestionList.length,
     );
   }
-}
+  Future<void> getSearchResults(String query, int offset, String token) async {
 
-Future<void> getSearchResults(String query, int offset, String token) async {
+    try {
+      // make the request
+      Response response = await get(
+          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=20',
+          headers: {HttpHeaders.authorizationHeader:
+          "Bearer $token"}
+      ); // enter access token after "Bearer"
 
-  try {
-    // make the request
-    Response response = await get(
-        'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=20',
-        headers: {HttpHeaders.authorizationHeader:
-        "Bearer $token"}
-    ); // enter access token after "Bearer"
+      var resultMap = jsonDecode(response.body);
+      print(resultMap); //
+      searchOutput = SearchResult.fromJson(resultMap);
 
-    var resultMap = jsonDecode(response.body);
-    print(resultMap); //
-    searchOutput = SearchResult.fromJson(resultMap);
+      print(searchOutput.tracks.items[19].name); //
+    }catch (e){
+      print('caught error: $e');
+    }
 
-    print(searchOutput.tracks.items[19].name); //
-  }catch (e){
-    print('caught error: $e');
   }
 
-} // end of getSearchResults
+}
+
+
+
+

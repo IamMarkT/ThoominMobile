@@ -12,7 +12,6 @@ class AccessToken {
       Map data = jsonDecode(response.body);
      // print(data.toString());
 
-
       // get properties from data
       return accessToken = data['accessToken'];
     }
