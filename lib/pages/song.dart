@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:thoomin/services/SearchResult.dart';
 import 'dart:ui';
 import 'package:palette_generator/palette_generator.dart';
@@ -43,8 +44,8 @@ class _SongPageState extends State<SongPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 30,),
-              Text('Are you sure you want to add',
+              SizedBox(height: 40,),
+              Text('Are you sure you want to add:',
                 style: TextStyle(
 
                   color: imgAccentColor.color,
@@ -91,7 +92,8 @@ class _SongPageState extends State<SongPage> {
                   SizedBox(width: 15,),
                   RaisedButton(
                     onPressed: () {
-                      // add
+                      addSongToQueue(song.id);
+                      Navigator.pop(context);
                     },
                     child: Text('Yuh'),
                   ),
@@ -130,6 +132,23 @@ class _SongPageState extends State<SongPage> {
       imgAccentColor = PaletteColor(Colors.white,1);
     setState(() {
     });
+  }
+
+  void addSongToQueue(String id) async{
+    // set up POST request arguments
+    String url = 'https://thoominspotify.com/api/party/add';
+    Map<String, String> headers = {"Content-type": "application/json"};
+    String json = '{"name" : "test", "trackId" : "$id", "partyCode" : "046SQU" }';
+
+    // make POST request
+    Response response = await post(url, headers: headers, body: json);
+
+    // check the status code for the result
+    int statusCode = response.statusCode;
+    print(response.body);
+    print(statusCode == 200);
+
+
   }
 
 }// end of SongPage
