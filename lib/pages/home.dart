@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:thoomin/pages/currentlyPlaying.dart';
 import 'package:thoomin/services/SearchResult.dart';
 import 'package:thoomin/services/AccessToken.dart';
 import 'song.dart';
@@ -18,9 +19,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedPage = 0;
   final pageOptions = [
-    //currentlyplaying()
-    SafeArea(child: Text('We THOOMIN!', style: TextStyle(fontSize: 36),)),
-    SafeArea(child: Text('Landscape', style: TextStyle(fontSize: 36),)),
+    CurrentlyPlaying(),
+    SafeArea(child: Text('Landscape', style: TextStyle(fontSize: 36),)
+    ),
   ];
 
   @override
@@ -29,11 +30,14 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.purple[200],
 
       appBar: AppBar(
+        backgroundColor: Colors.grey[900],
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(Icons.menu),
-              onPressed: () { Scaffold.of(context).openDrawer(); },
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+                },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
@@ -46,13 +50,18 @@ class _HomeState extends State<Home> {
               currentToken.getAccessToken();
               showSearch(
                   context: context,
-                  delegate: SongSearch());
+                  delegate: SongSearch()
+              );
             },
           ),
         ],
       ),
       body: pageOptions[selectedPage],
+
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[900],
+        selectedItemColor: Colors.grey[200],
+        unselectedItemColor: Colors.grey[600],
         currentIndex: selectedPage,
         onTap: (int index){
           setState(() {
@@ -117,18 +126,20 @@ class SongSearch extends SearchDelegate<Tracks>{
     //getSearchResults(query);
 
     if(query.isEmpty) {
-      return Container();
+      return Container(
+        color: Colors.grey[100],
+      );
     }else {
       return FutureBuilder(
         future: getSearchResults(query, offset, currentToken.accessToken),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
+              backgroundColor: Colors.grey[100],
               body: ListView.builder(
                 itemCount: searchOutput.tracks.items.length,
                 itemBuilder: (context, index){
                   return Card(
-
                     margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
                     child: ListTile(
                       //onTap: (){},
@@ -140,28 +151,18 @@ class SongSearch extends SearchDelegate<Tracks>{
                       trailing: IconButton(
                         icon: Icon(Icons.add),
                         onPressed: (){
-                          Navigator.push(
-                              context,
+                          Navigator.push(context,
                               MaterialPageRoute(builder: (context) =>
                                   SongPage(searchOutput.tracks.items[index])
                               ),
-                          );},
+                            );
+                          },
                       ),
                     ),
                   );
                 },
               ),
-              persistentFooterButtons: <Widget>[
-                FlatButton(
-                  child: Text('Next'),
-                  onPressed: (){
 
-                  },
-                ),
-                FlatButton(
-                  child: Text('Back'),
-                ),
-              ],
             );
           } else
             return Center(child: CircularProgressIndicator());
@@ -192,7 +193,7 @@ class SongSearch extends SearchDelegate<Tracks>{
     try {
       // make the request
       Response response = await get(
-          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=20',
+          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=50',
           headers: {HttpHeaders.authorizationHeader:
           "Bearer $token"}
       ); // enter access token after "Bearer"
@@ -201,13 +202,11 @@ class SongSearch extends SearchDelegate<Tracks>{
       print(resultMap); //
       searchOutput = SearchResult.fromJson(resultMap);
 
-      print(searchOutput.tracks.items[19].name); //
+      print(searchOutput.tracks.items[49].name); //
     }catch (e){
       print('caught error: $e');
     }
-
   }
-
 }
 
 

@@ -36,56 +36,71 @@ class _SongPageState extends State<SongPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: imgAccentColor.color.withOpacity(.85),
-        leading: BackButton(color: imgMainColor.color),
-        title: Text('Back to Search',
-          style: TextStyle(
-            color: imgMainColor.color,
-          ),
-        ),
-      ),
+
       backgroundColor: imgMainColor.color.withOpacity(.5),
       body: SafeArea(
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text('${song.name}',
+              SizedBox(height: 30,),
+              Text('Are you sure you want to add',
                 style: TextStyle(
+
                   color: imgAccentColor.color,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 70,),
+
               Image.network(
                   '${song.album.images[0].url}',
                   width: 350,
                   height: 350,
                   fit:BoxFit.contain
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 20,),
+              Text('${song.name}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: imgAccentColor.color,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
 
-              Text('$allArtists',
-              style: TextStyle(
+                ),
+              ),
+              Text('by $allArtists',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                 color: imgAccentColor.color,
                 fontSize: 15
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 80,),
 
-              RaisedButton(
-                onPressed: () {
-                },
-                child: Text('Add to Queue'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Nah'),
+                  ),
+                  SizedBox(width: 15,),
+                  RaisedButton(
+                    onPressed: () {
+                      // add
+                    },
+                    child: Text('Yuh'),
+                  ),
+                ],
               ),
-
             ],
           ),
         ),
       ),
-
     );
   }
 

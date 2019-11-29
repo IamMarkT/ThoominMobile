@@ -1,5 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:thoomin/pages/home.dart';
+
+
+String guestName;
+String partyCode;
+
+
 
 class Login extends StatelessWidget {
   @override
@@ -33,20 +40,36 @@ class Login extends StatelessWidget {
                    fontWeight: FontWeight.bold,
                    fontSize: 50,
                    color: Colors.white,
-                   letterSpacing: 1.5,
+                   letterSpacing: 7.5,
                 ),
               ),
                 SizedBox(height: 40),
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Enter Your Username',
+                    labelText: 'Enter Nickname',
+
                 ),
               ),
                 SizedBox(height: 40),
                 TextFormField(
                   decoration: InputDecoration(
-                      labelText: 'Enter Party Code'
+                      labelText: 'Enter Party Code',
                   ),
+                ),
+                SizedBox(height: 250),
+                RaisedButton(
+                  child: Text("Let's get THOOMIN",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+
+                  ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
+                    }
                 ),
               ],
             ),
