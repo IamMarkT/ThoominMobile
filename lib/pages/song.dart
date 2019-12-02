@@ -7,23 +7,28 @@ import 'package:palette_generator/palette_generator.dart';
 // ignore: must_be_immutable
 class SongPage extends StatefulWidget {
   Items song;
+  String nickName;
+  String partyCode;
 
-  SongPage(Items song){
+  SongPage(Items song, String nickName, String partyCode){
     this.song = song;
+    this.nickName = nickName;
+    this.partyCode = partyCode;
   }
 
   @override
-  _SongPageState createState() => _SongPageState(song);
+  _SongPageState createState() => _SongPageState(song, nickName, partyCode);
 }
 
 class _SongPageState extends State<SongPage> {
-  PaletteColor imgMainColor;
-  PaletteColor imgAccentColor;
+  PaletteColor imgMainColor, imgAccentColor;
   Items song;
-  String allArtists;
+  String nickName, partyCode, allArtists;
 
-  _SongPageState(Items song){
+  _SongPageState(Items song, String nickName, String partyCode){
     this.song = song;
+    this.nickName = nickName;
+    this.partyCode = partyCode;
   }
 
   @override
@@ -138,7 +143,7 @@ class _SongPageState extends State<SongPage> {
     // set up POST request arguments
     String url = 'https://thoominspotify.com/api/party/add';
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"name" : "test", "trackId" : "$id", "partyCode" : "046SQU" }';
+    String json = '{"name" : "$nickName", "trackId" : "$id", "partyCode" : "$partyCode" }';
 
     // make POST request
     Response response = await post(url, headers: headers, body: json);
@@ -146,8 +151,7 @@ class _SongPageState extends State<SongPage> {
     // check the status code for the result
     int statusCode = response.statusCode;
     print(response.body);
-    print(statusCode == 200);
-
+    print(statusCode);
 
   }
 

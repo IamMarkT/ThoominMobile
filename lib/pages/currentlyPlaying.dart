@@ -56,7 +56,7 @@ class _CurrentlyPlayingState extends State<CurrentlyPlaying> {
       Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/danceClub.jpg"),
+              image: AssetImage("assets/thoominHome.jpg"),
               fit: BoxFit.cover,
             ),
           ),

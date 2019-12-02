@@ -11,26 +11,48 @@ import 'song.dart';
 SearchResult searchOutput = SearchResult();
 AccessToken currentToken = AccessToken();
 
+// ignore: must_be_immutable
 class Home extends StatefulWidget {
+  String nickName;
+  String partyCode;
+
+  Home(String nickName, String partyCode){
+    this.nickName = nickName;
+    this.partyCode = partyCode;
+  }
+
+
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(nickName, partyCode);
 }
 
 class _HomeState extends State<Home> {
+  String nickName;
+  String partyCode;
   int selectedPage = 0;
+
   final pageOptions = [
     CurrentlyPlaying(),
-    SafeArea(child: Text('Landscape', style: TextStyle(fontSize: 36),)
+    SafeArea(child: Text('QUEUE', style: TextStyle(fontSize: 36),)
     ),
   ];
+
+  _HomeState(String nickName, String partyCode){
+    this.nickName = nickName;
+    this.partyCode = partyCode;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[200],
-
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -50,7 +72,7 @@ class _HomeState extends State<Home> {
               currentToken.getAccessToken();
               showSearch(
                   context: context,
-                  delegate: SongSearch()
+                  delegate: SongSearch(nickName, partyCode)
               );
             },
           ),
@@ -86,6 +108,18 @@ class _HomeState extends State<Home> {
 class SongSearch extends SearchDelegate<Tracks>{
   final recentSearch = [];
   int offset = 0;
+
+  String nickName, partyCode;
+
+  SongSearch(String nickName, String partyCode){
+    this.nickName = nickName;
+    this.partyCode = partyCode;
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context);
+  }
 
   // DONE; WORKING CLEAR BUTTON
   @override
@@ -127,7 +161,6 @@ class SongSearch extends SearchDelegate<Tracks>{
 
     if(query.isEmpty) {
       return Container(
-        color: Colors.grey[100],
       );
     }else {
       return FutureBuilder(
@@ -135,25 +168,30 @@ class SongSearch extends SearchDelegate<Tracks>{
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-              backgroundColor: Colors.grey[100],
               body: ListView.builder(
                 itemCount: searchOutput.tracks.items.length,
                 itemBuilder: (context, index){
                   return Card(
+                    color: Colors.grey[500],
                     margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
                     child: ListTile(
                       //onTap: (){},
-                      title: Text(searchOutput.tracks.items[index].name),
-                      subtitle: Text(searchOutput.tracks.items[index].artists[0].name),
+                      title: Text(searchOutput.tracks.items[index].name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      subtitle: Text(searchOutput.tracks.items[index].artists[0].name,
+                        style: TextStyle(color: Colors.black),
+                      ),
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(searchOutput.tracks.items[index].album.images[0].url),
                       ),
                       trailing: IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(Icons.add,
+                        color: Colors.black,),
                         onPressed: (){
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) =>
-                                  SongPage(searchOutput.tracks.items[index])
+                                  SongPage(searchOutput.tracks.items[index], nickName, partyCode)
                               ),
                             );
                           },
@@ -175,19 +213,11 @@ class SongSearch extends SearchDelegate<Tracks>{
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildSuggestions
     // show when someone searches for anything
-    final suggestionList = recentSearch;
 
-    return ListView.builder(
-      itemBuilder: (context, index)=>ListTile(
-        onTap: (){
-          showResults(context);
-        },
-        leading: Icon(Icons.music_note),
-        title: Text(suggestionList[index]),
-      ),
-      itemCount: suggestionList.length,
-    );
+    return Scaffold();
   }
+
+
   Future<void> getSearchResults(String query, int offset, String token) async {
 
     try {
