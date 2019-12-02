@@ -100,6 +100,7 @@ class _LoginState extends State<Login> {
 
                   SizedBox(height: ScreenUtil.getInstance().setHeight(380)),
                   RaisedButton(
+                    color: Colors.purple[700],
                     padding: EdgeInsets.all(15),
                       child: Text(
                         "Let's get THOOMIN!",

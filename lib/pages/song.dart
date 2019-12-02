@@ -34,7 +34,7 @@ class _SongPageState extends State<SongPage> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+   super.initState();
    updatePalette();
    allArtists = getArtist(song);
   }

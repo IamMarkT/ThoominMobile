@@ -56,11 +56,32 @@ class _HomeState extends State<Home> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: const Icon(Icons.menu),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Scaffold.of(context).openDrawer();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context)
+                {
+                  return AlertDialog(
+                    title: Text('Disconnect from Party?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('No'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Yes'),
+                        onPressed: () {
+                          Navigator.of(context).popUntil(
+                              ModalRoute.withName('/'));
+                        },
+                      ),
+                    ],
+                  );
+                });
                 },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
         ),
@@ -200,7 +221,6 @@ class SongSearch extends SearchDelegate<Tracks>{
                   );
                 },
               ),
-
             );
           } else
             return Center(child: CircularProgressIndicator());
