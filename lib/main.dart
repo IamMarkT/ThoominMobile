@@ -13,15 +13,11 @@ void main() => runApp(MaterialApp(
     ),
     textTheme: TextTheme().apply(bodyColor: Colors.black),
     scaffoldBackgroundColor: Colors.grey[800],
-
-    buttonColor: Colors.grey[900],
+    buttonColor: Colors.grey[600],
   ),
-
-
 
   initialRoute: '/',
   routes: {
     '/': (context) => Login(),
-    //'/home': (context) => Home(nickName, partyCode),
   },
 ));
