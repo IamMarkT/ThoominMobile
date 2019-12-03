@@ -1,14 +1,9 @@
-import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
-import 'package:thoomin/pages/currentlyPlaying.dart';
-import 'package:thoomin/services/SearchResult.dart';
+import 'package:thoomin/pages/nowPlaying.dart';
+import 'package:thoomin/pages/songSearch.dart';
 import 'package:thoomin/services/AccessToken.dart';
-import 'song.dart';
 
-SearchResult searchOutput = SearchResult();
 AccessToken currentToken = AccessToken();
 
 // ignore: must_be_immutable
@@ -32,7 +27,7 @@ class _HomeState extends State<Home> {
   int selectedPage = 0;
 
   final pageOptions = [
-    CurrentlyPlaying(),
+    NowPlaying(),
     SafeArea(child: Text('QUEUE', style: TextStyle(fontSize: 36),)
     ),
   ];
@@ -93,7 +88,7 @@ class _HomeState extends State<Home> {
               currentToken.getAccessToken();
               showSearch(
                   context: context,
-                  delegate: SongSearch(nickName, partyCode)
+                  delegate: SongSearch(nickName, partyCode, currentToken)
               );
             },
           ),
@@ -126,138 +121,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-class SongSearch extends SearchDelegate<Tracks>{
-  final recentSearch = [];
-  int offset = 0;
-
-  String nickName, partyCode;
-
-  SongSearch(String nickName, String partyCode){
-    this.nickName = nickName;
-    this.partyCode = partyCode;
-  }
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context);
-  }
-
-  // DONE; WORKING CLEAR BUTTON
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    // actions for app bar
-
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: (){
-          query = "";
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    // leading icon on the left of the app bar
-
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: (){
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context)  {
-    // TODO: implement buildResults
-    // show some result based on the selection
-    //getSearchResults(query);
-
-    if(query.isEmpty) {
-      return Container(
-      );
-    }else {
-      return FutureBuilder(
-        future: getSearchResults(query, offset, currentToken.accessToken),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Scaffold(
-              body: ListView.builder(
-                itemCount: searchOutput.tracks.items.length,
-                itemBuilder: (context, index){
-                  return Card(
-                    color: Colors.grey[500],
-                    margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                    child: ListTile(
-                      //onTap: (){},
-                      title: Text(searchOutput.tracks.items[index].name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      subtitle: Text(searchOutput.tracks.items[index].artists[0].name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(searchOutput.tracks.items[index].album.images[0].url),
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.add,
-                        color: Colors.black,),
-                        onPressed: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) =>
-                                  SongPage(searchOutput.tracks.items[index], nickName, partyCode)
-                              ),
-                            );
-                          },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          } else
-            return Center(child: CircularProgressIndicator());
-        },
-      );
-    }
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    // show when someone searches for anything
-
-    return Scaffold();
-  }
-
-
-  Future<void> getSearchResults(String query, int offset, String token) async {
-
-    try {
-      // make the request
-      Response response = await get(
-          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=50',
-          headers: {HttpHeaders.authorizationHeader:
-          "Bearer $token"}
-      ); // enter access token after "Bearer"
-
-      var resultMap = jsonDecode(response.body);
-      print(resultMap); //
-      searchOutput = SearchResult.fromJson(resultMap);
-
-      print(searchOutput.tracks.items[49].name); //
-    }catch (e){
-      print('caught error: $e');
-    }
-  }
-}
 
 
 
