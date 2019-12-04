@@ -66,40 +66,42 @@ class _LoginState extends State<Login> {
                   SizedBox(height: ScreenUtil.getInstance().setHeight(140)),
                   // FormCard(),
                   Container(
-                    width: double.infinity,
-                    height: ScreenUtil.getInstance().setHeight(600),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[900].withOpacity(.2),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: <Widget>[
-                          TextField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Nickname',
-                            ),
-                            style: TextStyle(
-                              fontSize: 26,
-                            ),
+                      width: double.infinity,
+                      height: ScreenUtil.getInstance().setHeight(600),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[900].withOpacity(.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: <Widget>[
+                              TextField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Nickname',
+                                ),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                              ),
+                              SizedBox(height: ScreenUtil.getInstance().setHeight(30)),
+                              TextField(
+                                textCapitalization: TextCapitalization.characters,
+                                controller: partyController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter Party Code',
+                                ),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: ScreenUtil.getInstance().setHeight(40)),
-                          TextField(
-                            textCapitalization: TextCapitalization.characters,
-                            controller: partyController,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Party Code',
-                            ),
-                            style: TextStyle(
-                              fontSize: 26,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
 
                   SizedBox(height: ScreenUtil.getInstance().setHeight(380)),
                   RaisedButton(

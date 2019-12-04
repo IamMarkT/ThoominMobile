@@ -22,7 +22,8 @@ class SongPage extends StatefulWidget {
 }
 
 class _SongPageState extends State<SongPage> {
-  PaletteColor imgMainColor, imgAccentColor;
+  PaletteColor imgMainColor = PaletteColor(Colors.grey[800], 1),
+      imgAccentColor = PaletteColor(Colors.white, 1);
   Items song;
   String nickName, partyCode, allArtists;
 

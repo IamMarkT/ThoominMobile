@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:thoomin/services/Track.dart';
 import 'dart:core';
+import 'package:thoomin/services/TrackQueue.dart';
 
-List<Track> queuedSongs = List<Track>();
+TrackQueue queuedSongs = TrackQueue();
 
 class Queue extends StatefulWidget {
   String partyCode;
@@ -32,20 +32,20 @@ class _QueueState extends State<Queue> {
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
            body: ListView.builder(
-              itemCount: queuedSongs.length,
+              itemCount: queuedSongs.tracks.length,
               itemBuilder: (context, index) {
                 return Card(
-                  color: Colors.grey[500],
+                  color: Colors.grey[600],
                   margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
                   child: ListTile(
-                    title: Text(queuedSongs[index].name,
+                    title: Text(queuedSongs.tracks[index].name,
                       style: TextStyle(color: Colors.black),
                     ),
-                    subtitle: Text(queuedSongs[index].artists[0],
+                    subtitle: Text(queuedSongs.tracks[index].artists[0],
                       style: TextStyle(color: Colors.black),
                     ),
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(queuedSongs[index].image),
+                      backgroundImage: NetworkImage(queuedSongs.tracks[index].image),
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.queue_music,
@@ -63,8 +63,8 @@ class _QueueState extends State<Queue> {
   }
 
 
-  Future<List<Track>> getQueue() async {
-    String url = 'https://thoominspotify.com/api/party/queue';
+  Future<void> getQueue() async {
+    String url = 'https://thoominspotify.com/api/party/queuetwo';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"partyCode" : "$partyCode" }';
 
@@ -74,16 +74,10 @@ class _QueueState extends State<Queue> {
 
       var resultMap = jsonDecode(response.body);
       print(resultMap);
-
-      //resultMap.map((m)=>Track.fromJson(m)).;
-
-      queuedSongs = resultMap.map<Track>((t)=>Track.fromJson(t));
-      //szxngy
-      return queuedSongs;
+      queuedSongs = TrackQueue.fromJson(resultMap);
 
     } catch (e) {
       print('caught error: $e');
-      return null;
     }
   }
 
