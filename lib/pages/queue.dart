@@ -26,10 +26,11 @@ class _QueueState extends State<Queue> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getQueue(),
+    return StreamBuilder(
+      stream: getQueue(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        queuedSongs = snapshot.data;
+        if (snapshot.hasData) {
           return Scaffold(
            body: ListView.builder(
               itemCount: queuedSongs.tracks.length,
@@ -63,7 +64,7 @@ class _QueueState extends State<Queue> {
   }
 
 
-  Future<void> getQueue() async {
+  Stream<TrackQueue> getQueue() async* {
     String url = 'https://thoominspotify.com/api/party/queuetwo';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"partyCode" : "$partyCode" }';
@@ -76,8 +77,13 @@ class _QueueState extends State<Queue> {
       print(resultMap);
       queuedSongs = TrackQueue.fromJson(resultMap);
 
+      await Future.delayed(Duration(seconds: 2));
+      yield queuedSongs;
+      setState(() {});
+
     } catch (e) {
       print('caught error: $e');
+      yield null;
     }
   }
 

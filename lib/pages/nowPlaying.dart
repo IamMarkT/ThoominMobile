@@ -157,7 +157,7 @@ class _NowPlayingState extends State<NowPlaying> {
       currentSong = Track.fromJson(resultMap);
 
       await updatePalette();
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: 2));
 
       yield currentSong;
       setState(() {});
