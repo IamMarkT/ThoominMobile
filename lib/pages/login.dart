@@ -24,7 +24,7 @@ class _LoginState extends State<Login> {
             image: AssetImage('assets/thoominHome.jpg'),
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fitHeight,
-            alignment: Alignment(0.10, 0),
+            alignment: Alignment(0.16, 0),
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
@@ -100,7 +100,6 @@ class _LoginState extends State<Login> {
 
                   SizedBox(height: ScreenUtil.getInstance().setHeight(380)),
                   RaisedButton(
-                    color: Colors.purple[700],
                     padding: EdgeInsets.all(15),
                       child: Text(
                         "Let's get THOOMIN!",

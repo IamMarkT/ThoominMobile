@@ -8,8 +8,7 @@ AccessToken currentToken = AccessToken();
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
-  String nickName;
-  String partyCode;
+  String nickName, partyCode;
 
   Home(String nickName, String partyCode){
     this.nickName = nickName;
@@ -22,30 +21,30 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String nickName;
-  String partyCode;
-  int selectedPage = 0;
+   String nickName;
+   String partyCode;
+   int selectedPage = 0;
 
-  final pageOptions = [
-    NowPlaying(),
+   _HomeState(String nickName, String partyCode){
+     this.nickName = nickName;
+     this.partyCode = partyCode;
+   }
+
+  List<Widget> _pageOptions() => [
+    NowPlaying(partyCode),
     SafeArea(child: Text('QUEUE', style: TextStyle(fontSize: 36),)
     ),
   ];
-
-  _HomeState(String nickName, String partyCode){
-    this.nickName = nickName;
-    this.partyCode = partyCode;
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pageOptions = _pageOptions();
     return Scaffold(
       appBar: AppBar(
         leading: Builder(

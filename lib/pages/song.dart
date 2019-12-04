@@ -10,7 +10,7 @@ class SongPage extends StatefulWidget {
   String nickName;
   String partyCode;
 
-  SongPage(Items song, String nickName, String partyCode){
+  SongPage(Items song, String nickName, String partyCode) {
     this.song = song;
     this.nickName = nickName;
     this.partyCode = partyCode;
@@ -25,7 +25,7 @@ class _SongPageState extends State<SongPage> {
   Items song;
   String nickName, partyCode, allArtists;
 
-  _SongPageState(Items song, String nickName, String partyCode){
+  _SongPageState(Items song, String nickName, String partyCode) {
     this.song = song;
     this.nickName = nickName;
     this.partyCode = partyCode;
@@ -34,57 +34,113 @@ class _SongPageState extends State<SongPage> {
   @override
   void initState() {
     // TODO: implement initState
-   super.initState();
-   updatePalette();
-   allArtists = getArtist(song);
+    super.initState();
+    updatePalette();
+    allArtists = getArtist(song);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: imgMainColor.color.withOpacity(.5),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 40,),
-              Text('Are you sure you want to add:',
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Are you sure you want to add:',
                 style: TextStyle(
-
                   color: imgAccentColor.color,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      // bottomLeft
+                        offset: Offset(-.25, -.25),
+                        color: Colors.black),
+                    Shadow(
+                      // bottomRight
+                        offset: Offset(.25, -.25),
+                        color: Colors.black),
+                    Shadow(
+                      // topRight
+                        offset: Offset(.25, .25),
+                        color: Colors.black),
+                    Shadow(
+                      // topLeft
+                        offset: Offset(-.25, .25),
+                        color: Colors.black),
+                  ],
                 ),
               ),
-              SizedBox(height: 70,),
-
-              Image.network(
-                  '${song.album.images[0].url}',
-                  width: 350,
-                  height: 350,
-                  fit:BoxFit.contain
+              SizedBox(
+                height: 70,
               ),
-              SizedBox(height: 20,),
-              Text('${song.name}',
+              Image.network('${song.album.images[0].url}',
+                  width: 350, height: 350, fit: BoxFit.contain),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                '${song.name}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: imgAccentColor.color,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-
+                  shadows: [
+                    Shadow(
+                        // bottomLeft
+                        offset: Offset(-.5, -.5),
+                        color: Colors.black),
+                    Shadow(
+                        // bottomRight
+                        offset: Offset(.5, -.5),
+                        color: Colors.black),
+                    Shadow(
+                        // topRight
+                        offset: Offset(.5, .5),
+                        color: Colors.black),
+                    Shadow(
+                        // topLeft
+                        offset: Offset(-.5, .5),
+                        color: Colors.black),
+                  ],
                 ),
               ),
-              Text('by $allArtists',
+              SizedBox(height: 8,),
+
+              Text(
+                'by $allArtists',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                color: imgAccentColor.color,
-                fontSize: 15
+                  color: imgAccentColor.color,
+                  fontSize: 15,
+                  shadows: [
+                    Shadow(
+                        // bottomLeft
+                        offset: Offset(-.4, -.4),
+                        color: Colors.black),
+                    Shadow(
+                        // bottomRight
+                        offset: Offset(.4, -.4),
+                        color: Colors.black),
+                    Shadow(
+                        // topRight
+                        offset: Offset(.4, .4),
+                        color: Colors.black),
+                    Shadow(
+                        // topLeft
+                        offset: Offset(-.4, .4),
+                        color: Colors.black),
+                  ],
                 ),
               ),
               SizedBox(height: 80,),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -92,15 +148,17 @@ class _SongPageState extends State<SongPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Nah'),
+                    child: Text('No'),
                   ),
-                  SizedBox(width: 15,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   RaisedButton(
                     onPressed: () {
                       addSongToQueue(song.id);
                       Navigator.pop(context);
                     },
-                    child: Text('Yuh'),
+                    child: Text('Yes'),
                   ),
                 ],
               ),
@@ -111,48 +169,47 @@ class _SongPageState extends State<SongPage> {
     );
   }
 
-  String getArtist(Items song){
+  String getArtist(Items song) {
     String allArtist = '';
     int length = song.artists.length;
 
-    for(int i = 0; i < length-1; i++)
-    {
+    for (int i = 0; i < length - 1; i++) {
       allArtist += '${song.artists[i].name}, ';
     }
-    allArtist += '${song.artists[length-1].name}';
+    allArtist += '${song.artists[length - 1].name}';
     return allArtist;
   }
 
-  updatePalette() async{
-    PaletteGenerator generator = await PaletteGenerator.
-      fromImageProvider(NetworkImage(widget.song.album.images[0].url));
+  updatePalette() async {
+    PaletteGenerator generator = await PaletteGenerator.fromImageProvider(
+        NetworkImage(widget.song.album.images[0].url));
 
     imgMainColor = generator.dominantColor;
 
-    if(generator.lightVibrantColor != null && generator.lightVibrantColor != imgMainColor)
+    if (generator.vibrantColor != null &&
+        generator.vibrantColor != imgMainColor)
+      imgAccentColor = generator.vibrantColor;
+    else if (generator.lightVibrantColor != null &&
+        generator.lightVibrantColor != imgMainColor)
       imgAccentColor = generator.lightVibrantColor;
-    else if(generator.darkVibrantColor != null && generator.darkVibrantColor != imgMainColor)
-      imgAccentColor = generator.darkVibrantColor;
     else
-      imgAccentColor = PaletteColor(Colors.white,1);
-    setState(() {
-    });
+      imgAccentColor = PaletteColor(Colors.white, 1);
+    setState(() {});
   }
 
-  void addSongToQueue(String id) async{
+  void addSongToQueue(String id) async {
     // set up POST request arguments
     String url = 'https://thoominspotify.com/api/party/add';
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"name" : "$nickName", "trackId" : "$id", "partyCode" : "$partyCode" }';
+    String json =
+        '{"name" : "$nickName", "trackId" : "$id", "partyCode" : "$partyCode" }';
 
     // make POST request
     Response response = await post(url, headers: headers, body: json);
 
     // check the status code for the result
-    int statusCode = response.statusCode;
-    print(response.body);
-    print(statusCode);
-
+    // int statusCode = response.statusCode;
+    // print(response.body);
+    // print(statusCode);
   }
-
-}// end of SongPage
+} // end of SongPage

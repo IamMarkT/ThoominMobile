@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:thoomin/pages/song.dart';
@@ -10,8 +9,6 @@ import 'package:thoomin/services/SearchResult.dart';
 SearchResult searchOutput = SearchResult();
 
 class SongSearch extends SearchDelegate<Tracks> {
-  final recentSearch = [];
-  int offset = 0;
   String nickName, partyCode;
   AccessToken currentToken = AccessToken();
 
@@ -69,7 +66,7 @@ class SongSearch extends SearchDelegate<Tracks> {
       );
     } else {
       return FutureBuilder(
-        future: getSearchResults(query, offset, currentToken.accessToken),
+        future: getSearchResults(query, currentToken.accessToken),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
@@ -80,7 +77,6 @@ class SongSearch extends SearchDelegate<Tracks> {
                     color: Colors.grey[500],
                     margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
                     child: ListTile(
-                      //onTap: (){},
                       title: Text(searchOutput.tracks.items[index].name,
                         style: TextStyle(color: Colors.black),
                       ),
@@ -125,23 +121,20 @@ class SongSearch extends SearchDelegate<Tracks> {
     return Scaffold();
   }
 
-
-  Future<void> getSearchResults(String query, int offset, String token) async {
+  Future<void> getSearchResults(String query, String token) async {
     try {
       // make the request
       Response response = await get(
-          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=$offset&limit=50',
+          'https://api.spotify.com/v1/search?q=$query&type=track,artist&offset=0&limit=50',
           headers: {HttpHeaders.authorizationHeader:
           "Bearer $token"}
       ); // enter access token after "Bearer"
 
       var resultMap = jsonDecode(response.body);
-      print(resultMap); //
       searchOutput = SearchResult.fromJson(resultMap);
 
-      print(searchOutput.tracks.items[49].name); //
     } catch (e) {
-      print('caught error: $e');
+      print('caught error in songSearch: $e');
     }
   }
 }
