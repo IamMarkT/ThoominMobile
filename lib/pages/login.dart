@@ -39,25 +39,28 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(height: ScreenUtil.getInstance().setHeight(100)),
-                  Text(
-                    'THOOMIN',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 50,
-                      color: Colors.white,
-                      letterSpacing: 7,
-                      shadows:<Shadow>[
-                        Shadow(
-                          offset: Offset(1.0, 1.0),
-                          blurRadius: 15.0,
-                          color: Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        Shadow(
-                          offset: Offset(2.0, 2.0),
-                          blurRadius: 5.0,
-                          color: Color.fromARGB(125, 0, 0, 255),
-                        ),
-                      ],
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      'THOOMIN',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
+                        color: Colors.white,
+                        letterSpacing: 7,
+                        shadows:<Shadow>[
+                          Shadow(
+                            offset: Offset(1.0, 1.0),
+                            blurRadius: 15.0,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                          Shadow(
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                            color: Color.fromARGB(125, 0, 0, 255),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: ScreenUtil.getInstance().setHeight(140)),
@@ -101,10 +104,13 @@ class _LoginState extends State<Login> {
                   SizedBox(height: ScreenUtil.getInstance().setHeight(380)),
                   RaisedButton(
                     padding: EdgeInsets.all(15),
-                      child: Text(
-                        "Let's get THOOMIN!",
-                        style: TextStyle(
-                          fontSize: 30,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "Let's get THOOMIN!",
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
                         ),
                       ),
                       onPressed: () async {

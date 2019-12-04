@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:thoomin/pages/nowPlaying.dart';
+import 'package:thoomin/pages/queue.dart';
 import 'package:thoomin/pages/songSearch.dart';
 import 'package:thoomin/services/AccessToken.dart';
 
@@ -32,8 +33,7 @@ class _HomeState extends State<Home> {
 
   List<Widget> _pageOptions() => [
     NowPlaying(partyCode),
-    SafeArea(child: Text('QUEUE', style: TextStyle(fontSize: 36),)
-    ),
+    Queue(partyCode),
   ];
 
   @override

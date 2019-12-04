@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart';
 import 'package:thoomin/services/SearchResult.dart';
 import 'dart:ui';
@@ -41,6 +42,7 @@ class _SongPageState extends State<SongPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
     return Scaffold(
       backgroundColor: imgMainColor.color.withOpacity(.5),
       body: SafeArea(
@@ -49,7 +51,7 @@ class _SongPageState extends State<SongPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                height: 40,
+                height: ScreenUtil.getInstance().setHeight(80),
               ),
               Text(
                 'Are you sure you want to add:',
@@ -78,12 +80,14 @@ class _SongPageState extends State<SongPage> {
                 ),
               ),
               SizedBox(
-                height: 70,
+                height: ScreenUtil.getInstance().setHeight(100),
               ),
               Image.network('${song.album.images[0].url}',
-                  width: 350, height: 350, fit: BoxFit.contain),
+                  width: ScreenUtil.getInstance().setWidth(900),
+                  height: ScreenUtil.getInstance().setHeight(900),
+                  fit: BoxFit.contain),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.getInstance().setHeight(80),
               ),
               Text(
                 '${song.name}',
@@ -112,7 +116,7 @@ class _SongPageState extends State<SongPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 8,),
+              SizedBox(height: ScreenUtil.getInstance().setHeight(8),),
 
               Text(
                 'by $allArtists',
@@ -140,7 +144,7 @@ class _SongPageState extends State<SongPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 80,),
+              SizedBox(height: ScreenUtil.getInstance().setHeight(150),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -151,7 +155,7 @@ class _SongPageState extends State<SongPage> {
                     child: Text('No'),
                   ),
                   SizedBox(
-                    width: 15,
+                    width: ScreenUtil.getInstance().setWidth(50),
                   ),
                   RaisedButton(
                     onPressed: () {
